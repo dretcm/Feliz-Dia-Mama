@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+      * { padding: 0; margin: 0;}
+      #btn{
+        position: absolute; box-sizing: content-box; padding:0.3em 0.3em;
+        font-size: 5vw; font-family: sans-serif; font-weight : bold;
+        color:#FFFFFF;
+        background-color: #FF1493; /*#f14ebd;*/
+        transition: all 0.2s;
+        border:0.16em solid rgba(255,255,255,0);
+        text-decoration:none;
+        text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
+        margin: 1em;
+      }
+      #btn:hover{
+        border-color: rgba(255,255,255,1);
+      }
+      div{
+        position: absolute;
+      }
+      canvas {
+        cursor: crosshair;
+        display: block;
+      }
+    </style>
+
+    <script type="text/javascript">
+      let pos = 0, ago="#191970", current, play_audio=true, con=0;
+      const arr = ["Te quiero :3", "Desear :b", "Un Feliz Día! :D", "De las madres <3", "Te quiero mucho!" ,"Mamita de mi vida! :D"];
+
+      const colors = ["#191970", "#FFEFD5", "#87CEFA", "#F5F5F5", "#40E0D0", "#7CFC00", "#9400D3"];
+
+      function checkKey(event) {
+          var key = event.keyCode || event.which;
+          
+          // Presionar la tecla "Enter" (código 13) activará el botón
+          if (key) {
+            document.getElementById("btn").click();
+          }
+      }
+      document.addEventListener("keypress", checkKey);
+
+      document.addEventListener('DOMContentLoaded', ()=> {
+
+        document.querySelector("#play").muted = false;
+
+        btn = document.querySelector('#btn');
+        btn.style.top = ((window.innerHeight-15)/2 - btn.offsetHeight) + 'px';
+        btn.style.left = ((window.innerWidth-21)/2 - btn.offsetWidth) + 'px';
+
+        btn.onclick = () => {
+          if(play_audio){
+            document.querySelector("#play").play();
+            play_audio = false;
+          }
+
+          if(con>2){
+            con = 0;
+            play_audio = true;
+          }
+
+          btn.value = arr[pos];
+
+          if (pos < arr.length - 1) pos++;
+          else {
+            pos = 0;
+            con++;
+            do{
+              current = colors[Math.floor(Math.random()*(colors.length-1))];
+            }while(ago==current);
+            document.querySelector('body').style.backgroundColor = current;
+            ago = current;
+          }
+
+          let i=0,j=0, h = window.innerHeight-15, w=window.innerWidth-21;
+          do{
+            i = btn.style.top = Math.floor(Math.random()*h - (btn.offsetHeight));
+          }while(i>h || i <0);
+
+          do{
+            j = btn.style.left = Math.floor(Math.random()*w - (btn.offsetWidth));
+          }while(j>w || j<0);
+
+          btn.style.top = i +'px';
+          btn.style.left = j +'px';
+        }
+      })
+
+    </script>
+
+  </head>
+
+<body style="background-color: #191970;">
+
+    <div style="visibility: hidden;">
+      <audio id="play" src="juan_gabriel.mp3">
+      </audio>
+    </div>
+
+    <input type="button" id="btn" value="Hola Mamá Antonia :3">
+
+    <canvas id="canvas">Canvas is not supported in your browser.</canvas>
+    <script type="text/javascript" src="utils.js"></script>
+
+</body>
+</html>
